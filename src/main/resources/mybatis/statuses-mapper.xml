@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.1//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.bupt.bnrc.mining.weibo.db.StatusesDao">
+
+	<select id="getFirstPageStatuses" resultType="hashmap" parameterType="map">
+		select top ${firstPageSize} content from statuses order by status_id;
+	</select>
+	
+	<select id="getNextPageStatuses" resultType="hashmap" parameterType="map">
+		select top ${page_size} content
+		from statuses
+		where 
+		<![CDATA[
+			(status_id >
+				(select max(status_id) from 
+					(select top ${page_offset} status_id 
+						from statuses order by status_id) as T))
+		]]>
+	</select>
+</mapper>

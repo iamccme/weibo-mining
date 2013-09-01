@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.1//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.bupt.bnrc.mining.weibo.db.StatusesContentDao">
+
+	<select id="createTempTable">
+		select identity(int, 1, 1) as id, content into statuses_hsgui_temp from statuses 
+	</select>
+	<select id="getTopNStatusContent" parameterType="map" resultType="hashmap">
+		select top ${pageSize} * from statuses_hsgui_temp
+	</select>
+	<delete id="deleteTopNStatusContent" parameterType="map">
+		set rowcount ${pageSize} delete from statuses_hsgui_temp
+	</delete>
+</mapper>

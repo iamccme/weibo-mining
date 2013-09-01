@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.1//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.bupt.bnrc.mining.weibo.mysqldb.SentimentWordDao">
+
+	<select id="getAllSentimentWords" resultType="hashmap">
+		select * from sentiment_word;
+	</select>
+</mapper>

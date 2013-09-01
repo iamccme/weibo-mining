@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.1//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.bupt.bnrc.mining.weibo.db.TaggingStatusDao">
+	<insert id="addUntaggedStatus">
+		insert into tagging_statuses(content, tagging_flag) 
+			values(#{content}, #{tagging_flag})
+	</insert>
+	
+	<select id="getFirstPageStatuses" resultType="map" parameterType="map">
+		select top ${page_size} * from tagging_statuses
+		where tagging_flag = #{tagging_flag}
+		order by id;
+	</select>
+	
+	<select id="getNextPageStatuses" resultType="map" parameterType="map">
+		select top ${page_size} *
+		from tagging_statuses
+		where tagging_flag=#{tagging_flag} and
+		<![CDATA[
+			(id >
+				(select max(id) from 
+					(select top ${page_offset} id 
+						from tagging_statuses order by id) as T))
+		]]>
+	</select>
+	
+	<update id="updateStatusFlag" parameterType="map">
+		update tagging_statuses 
+		set tagging_flag=#{tagging_flag}
+		where id=#{id}
+	</update>
+	
+	<select id="getTotalCount" parameterType="map" resultType="int">
+		select count(id) from tagging_statuses
+		where tagging_flag = #{tagging_flag}
+	</select>
+</mapper>
